@@ -1,4 +1,4 @@
-import { env } from "@/lib/env";
+import { clientEnv } from "@/lib/env/client";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -50,7 +50,7 @@ export default function Home() {
             </Card>
           ))}
         </div>
-        <p className="text-sm text-muted-foreground">Running at {env.NEXT_PUBLIC_APP_URL}</p>
+        <p className="text-sm text-muted-foreground">Running at {clientEnv.NEXT_PUBLIC_APP_URL}</p>
       </section>
     </main>
   );

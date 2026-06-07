@@ -1,3 +1,5 @@
+import { env } from "@/lib/env";
+
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -48,6 +50,7 @@ export default function Home() {
             </Card>
           ))}
         </div>
+        <p className="text-sm text-muted-foreground">Running at {env.NEXT_PUBLIC_APP_URL}</p>
       </section>
     </main>
   );

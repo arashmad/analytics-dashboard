@@ -4,9 +4,9 @@
 
 **InsightPulse** — a small SaaS-style product analytics dashboard.
 
-The app lets a user create a workspace, create a product/project, generate an API key, ingest product events, and view analytics such as event volume, active users, conversion funnels, retention, and feature usage.
+The app lets a user create a workspace, invite team members, assign roles, create a product/project, generate an API key, ingest product events, and view analytics such as event volume, active users, conversion funnels, retention, and feature usage.
 
-This is intentionally **not geospatial** for v1. The goal is to practice modern JavaScript/TypeScript, full-stack product architecture, testing, database design, deployment, and portfolio-quality engineering without drifting into GIS complexity.
+This is intentionally **not geospatial** for v1. The goal is to practice modern JavaScript/TypeScript, full-stack product architecture, testing, database design, deployment, authorization, and portfolio-quality engineering without drifting into GIS complexity.
 
 ## Portfolio goal
 
@@ -18,6 +18,7 @@ Build a realistic full-stack prototype that demonstrates:
 - PostgreSQL data modeling and migrations
 - Authentication and protected app routes
 - Workspace-level roles and permissions
+- Tenant isolation and object-level authorization
 - Clean, layered feature architecture
 - Analytics/data-heavy dashboard UI
 - Unit, integration, authorization, and end-to-end tests
@@ -79,6 +80,56 @@ Use a feature-first structure with clear internal layers:
 - Validation happens at boundaries with Zod: forms, route handlers, server actions, ingestion API.
 - Every important architecture decision should be documented briefly in an ADR or architecture note.
 
+### API contract rule
+
+- Route handlers and server actions must have explicit input schemas.
+- API responses should use stable response DTOs, not raw database rows.
+- Validation errors, forbidden errors, not-found errors, and conflicts should have consistent shapes.
+- Client code should depend on typed contracts or typed query functions, not ad-hoc fetch calls scattered through components.
+
+### Error-handling rule
+
+Use shared typed errors instead of throwing random strings:
+
+- `UnauthorizedError`
+- `ForbiddenError`
+- `NotFoundError`
+- `ValidationError`
+- `ConflictError`
+- `InvariantError`
+
+Errors should be converted at the route/action boundary into safe user-facing responses.
+
+### Data-fetching rule
+
+- Prefer server-side fetching for page-level initial data.
+- Use TanStack Query for interactive client-side server state, filters, pagination, mutations, and refetch/invalidation behavior.
+- Keep query keys centralized per feature.
+- Never let UI components construct raw SQL or import repositories directly.
+
+### Audit and observability rule
+
+For portfolio realism, track important security/product actions:
+
+- member invited
+- invitation accepted
+- member role changed
+- member removed
+- API key created/revoked
+- project created/deleted
+- demo data generated/reset
+
+Audit logging should start simple with a database table. Do not add a logging platform before the MVP works.
+
+### Performance rule
+
+Analytics features must think about query shape early:
+
+- index by `workspaceId`, `projectId`, timestamp, and event name where useful.
+- use pagination for event tables.
+- avoid loading raw event history for dashboard summaries.
+- document at least one query-performance decision in architecture notes.
+
 ### Best-practice rule
 
 Before starting each milestone or introducing a major library pattern, check the current official documentation and document the chosen approach briefly. Prefer official docs and maintained examples over blog-post architecture.
@@ -100,16 +151,22 @@ Use simple but real workspace-level RBAC.
 
 Start with explicit permissions instead of hard-coding role names everywhere:
 
+- `workspace:read`
 - `workspace:update`
 - `members:read`
+- `members:invite`
 - `members:manage`
 - `projects:read`
-- `projects:manage`
+- `projects:create`
+- `projects:update`
+- `projects:delete`
 - `api_keys:read`
-- `api_keys:manage`
+- `api_keys:create`
+- `api_keys:revoke`
 - `analytics:read`
 - `analytics:configure`
 - `events:ingest`
+- `audit_log:read`
 - `demo_data:manage`
 
 ### Authorization rules
@@ -119,10 +176,19 @@ Start with explicit permissions instead of hard-coding role names everywhere:
 - Queries must be scoped by `workspaceId` and `projectId` so users cannot access data from another workspace.
 - API keys authorize event ingestion for a project, not dashboard access for a user.
 - Authorization behavior must have tests for positive and negative cases.
+- Default behavior should be deny-by-default: if no permission is found, access is blocked.
+
+### Workspace safety rules
+
+- A workspace must always have at least one owner.
+- A user cannot remove themselves if they are the last owner.
+- An admin cannot remove or downgrade an owner.
+- Invitation tokens must expire.
+- A user must not be able to infer private workspace/project data by guessing IDs.
 
 ## Product scope
 
-### Users
+### Users and workspace
 
 - Visitor can see landing page.
 - User can register, login, logout.
@@ -131,6 +197,9 @@ Start with explicit permissions instead of hard-coding role names everywhere:
 - User belongs to one or more workspaces.
 - User has a workspace role.
 - User capabilities are controlled by explicit permissions.
+- Permitted users can invite members.
+- Permitted users can change member roles.
+- Permitted users can remove members, subject to owner safety rules.
 
 ### Analytics domain
 
@@ -148,8 +217,9 @@ Start with explicit permissions instead of hard-coding role names everywhere:
 - No microservices.
 - No separate Express API unless Next.js API becomes a real blocker.
 - No production billing/payment.
-- No enterprise-grade authorization engine.
+- No enterprise-grade external authorization engine.
 - No over-designed clean architecture ceremony that slows down basic feature delivery.
+- No Storybook in the first implementation pass.
 
 ## Branch and deployment strategy
 
@@ -195,44 +265,58 @@ Start with explicit permissions instead of hard-coding role names everywhere:
 | M2-06 | Forgot password | Add password reset request flow. |
 | M2-07 | Reset password | Add token-based password reset page. |
 
-### Milestone 3 — App shell, RBAC, and dashboard UI
+### Milestone 3 — Workspace, RBAC, app shell, and dashboard foundation
 
 | ID | Ticket | Short description |
 |---|---|---|
-| M3-01 | Build app layout | Add sidebar, top nav, account menu. |
-| M3-02 | Add dashboard route | Create protected dashboard home page. |
+| M3-01 | Build app layout | Add sidebar, top nav, account menu, and protected app shell. |
+| M3-02 | Add workspace switcher | Let authenticated users switch active workspace. |
 | M3-03 | Define RBAC model | Add roles, permissions, and role-to-permission mapping. |
-| M3-04 | Add authorization helpers | Add server-side permission helpers for workspace/project access. |
-| M3-05 | Add role-aware navigation | Show/hide navigation and actions based on permissions. |
-| M3-06 | Add metric cards | Show users, sessions, events, conversion. |
-| M3-07 | Add chart components | Add time-series and breakdown charts. |
-| M3-08 | Add data table | Add recent events table with sorting/filtering. |
-| M3-09 | Add loading/error states | Standardize empty, loading, forbidden, and error UI. |
-| M3-10 | Add architecture notes | Document feature layers, dependency direction, and server/client rules. |
+| M3-04 | Add permission matrix | Document which permissions belong to each role. |
+| M3-05 | Add authorization helpers | Add server-side permission helpers for workspace/project access. |
+| M3-06 | Add tenant isolation helpers | Centralize workspace/project scoping checks. |
+| M3-07 | Add member list | Show workspace members and their roles. |
+| M3-08 | Invite workspace member | Let permitted users invite members by email. |
+| M3-09 | Accept workspace invite | Let invited users accept valid invitations. |
+| M3-10 | Change member role | Let permitted users update member roles safely. |
+| M3-11 | Remove workspace member | Let permitted users remove members safely. |
+| M3-12 | Protect owner safety rules | Prevent removing/downgrading the last owner. |
+| M3-13 | Add role-aware navigation | Show/hide navigation and actions based on permissions. |
+| M3-14 | Add dashboard route | Create protected dashboard home page placeholder. |
+| M3-15 | Add loading/error states | Standardize empty, loading, forbidden, not-found, and error UI. |
+| M3-16 | Add architecture notes | Document feature layers, dependency direction, server/client rules, and RBAC decisions. |
 
-### Milestone 4 — Analytics ingestion API
+### Milestone 4 — Project and analytics ingestion API
 
 | ID | Ticket | Short description |
 |---|---|---|
-| M4-01 | Add API key model | Store hashed project API keys with project-level scope. |
-| M4-02 | Create API key UI | Let permitted users create/revoke project API keys. |
-| M4-03 | Add event schema | Create events and sessions tables. |
-| M4-04 | Add ingest endpoint | Implement `POST /api/events` with API key auth. |
-| M4-05 | Validate event payloads | Validate payloads with Zod at the API boundary. |
-| M4-06 | Add ingestion policy | Keep user RBAC separate from API-key ingestion authorization. |
-| M4-07 | Add demo event generator | Generate fake traffic for dashboard testing. |
+| M4-01 | Add project management | Let permitted users create/update/archive projects. |
+| M4-02 | Add API key model | Store hashed project API keys with project-level scope. |
+| M4-03 | Create API key UI | Let permitted users create/revoke project API keys. |
+| M4-04 | Add event schema | Create events and sessions tables. |
+| M4-05 | Add API contracts | Define Zod schemas and response DTOs for project/API-key/event routes. |
+| M4-06 | Add ingest endpoint | Implement `POST /api/events` with API key auth. |
+| M4-07 | Validate event payloads | Validate payloads with Zod at the API boundary. |
+| M4-08 | Add ingestion policy | Keep user RBAC separate from API-key ingestion authorization. |
+| M4-09 | Add audit log basics | Track project/API-key/member security actions. |
+| M4-10 | Add demo event generator | Generate fake traffic for dashboard testing. |
 
-### Milestone 5 — Analytics queries
+### Milestone 5 — Analytics queries and dashboard UI
 
 | ID | Ticket | Short description |
 |---|---|---|
 | M5-01 | Add analytics repository | Keep SQL/Drizzle analytics queries inside data layer. |
-| M5-02 | Event volume query | Aggregate events by time bucket. |
-| M5-03 | Active users query | Calculate daily/weekly active users. |
-| M5-04 | Top events query | List most common event names. |
-| M5-05 | Session metrics query | Calculate sessions and average duration. |
-| M5-06 | Conversion summary | Calculate simple signup-to-action conversion. |
-| M5-07 | Dashboard API routes | Expose analytics through use cases and permission checks. |
+| M5-02 | Add query indexes | Add useful indexes for workspace/project/time/event queries. |
+| M5-03 | Event volume query | Aggregate events by time bucket. |
+| M5-04 | Active users query | Calculate daily/weekly active users. |
+| M5-05 | Top events query | List most common event names. |
+| M5-06 | Session metrics query | Calculate sessions and average duration. |
+| M5-07 | Conversion summary | Calculate simple signup-to-action conversion. |
+| M5-08 | Dashboard API routes | Expose analytics through use cases and permission checks. |
+| M5-09 | Add metric cards | Show users, sessions, events, conversion. |
+| M5-10 | Add chart components | Add time-series and breakdown charts. |
+| M5-11 | Add data table | Add recent events table with sorting, filtering, pagination. |
+| M5-12 | Add data-fetching strategy | Document server fetch vs TanStack Query usage. |
 
 ### Milestone 6 — Testing workflow
 
@@ -243,9 +327,11 @@ Start with explicit permissions instead of hard-coding role names everywhere:
 | M6-03 | API integration tests | Test route handlers against test DB. |
 | M6-04 | DB migration tests | Verify migrations run on clean database. |
 | M6-05 | Authorization tests | Test role/permission positive and negative cases. |
-| M6-06 | E2E setup | Add Playwright for auth, RBAC, and dashboard flows. |
-| M6-07 | Test data factories | Add reusable test factories/fixtures. |
-| M6-08 | Boundary checks | Add lightweight checks or conventions for layer imports. |
+| M6-06 | Tenant isolation tests | Test that users cannot access another workspace/project. |
+| M6-07 | Owner safety tests | Test last-owner and owner downgrade/remove protections. |
+| M6-08 | E2E setup | Add Playwright for auth, RBAC, workspace, and dashboard flows. |
+| M6-09 | Test data factories | Add reusable test factories/fixtures. |
+| M6-10 | Boundary checks | Add lightweight checks or conventions for layer imports. |
 
 ### Milestone 7 — CI/CD and deployment
 
@@ -254,11 +340,12 @@ Start with explicit permissions instead of hard-coding role names everywhere:
 | M7-01 | Add CI workflow | Run lint, typecheck, unit tests on PRs. |
 | M7-02 | Add integration workflow | Run DB-backed tests with PostgreSQL service. |
 | M7-03 | Add E2E workflow | Run Playwright in CI for core flows. |
-| M7-04 | Add authorization checks to CI | Ensure permission tests run in CI. |
+| M7-04 | Add authorization checks to CI | Ensure permission and tenant-isolation tests run in CI. |
 | M7-05 | Configure Neon | Create demo database and env variables. |
 | M7-06 | Configure Vercel deploy | Connect repo and deploy `main`. |
 | M7-07 | Add preview deploy notes | Document PR preview deployment behavior. |
-| M7-08 | Add release checklist | Define pre-merge and pre-release checks. |
+| M7-08 | Add deployment smoke check | Validate auth, DB, and dashboard route after deployment. |
+| M7-09 | Add release checklist | Define pre-merge and pre-release checks. |
 
 ### Milestone 8 — Portfolio polish
 
@@ -267,10 +354,13 @@ Start with explicit permissions instead of hard-coding role names everywhere:
 | M8-01 | Add landing page | Explain product and demo use case. |
 | M8-02 | Add demo mode | Let visitors explore seeded analytics safely. |
 | M8-03 | Add role demo accounts | Provide demo users for owner/admin/analyst/viewer roles. |
-| M8-04 | Add README | Document stack, setup, tests, deployment. |
-| M8-05 | Add architecture notes | Document app/data/auth/RBAC/deployment decisions. |
-| M8-06 | Add screenshots | Add dashboard screenshots for GitHub. |
-| M8-07 | Add portfolio summary | Write concise case-study style summary. |
+| M8-04 | Add audit log demo | Show selected audit events in the UI. |
+| M8-05 | Add README | Document stack, setup, tests, deployment. |
+| M8-06 | Add architecture notes | Document app/data/auth/RBAC/deployment decisions. |
+| M8-07 | Add performance notes | Document indexes, pagination, and one analytics query decision. |
+| M8-08 | Add screenshots | Add dashboard screenshots for GitHub. |
+| M8-09 | Add portfolio summary | Write concise case-study style summary. |
+| M8-10 | Add accessibility pass | Check keyboard navigation, labels, responsive states. |
 
 ### Milestone 9 — Event-driven extension
 
@@ -278,10 +368,11 @@ Start with explicit permissions instead of hard-coding role names everywhere:
 |---|---|---|
 | M9-01 | Add outbox table | Store domain events for async processing. |
 | M9-02 | Emit event-created event | Write outbox record during ingestion. |
-| M9-03 | Add worker route/job | Process pending outbox records. |
-| M9-04 | Add derived metrics table | Precompute selected analytics metrics. |
-| M9-05 | Add retry handling | Track attempts and failed event processing. |
-| M9-06 | Add event architecture note | Document why outbox is used instead of a message broker. |
+| M9-03 | Emit audit events | Write selected audit events through the same pattern. |
+| M9-04 | Add worker route/job | Process pending outbox records. |
+| M9-05 | Add derived metrics table | Precompute selected analytics metrics. |
+| M9-06 | Add retry handling | Track attempts and failed event processing. |
+| M9-07 | Add event architecture note | Document why outbox is used instead of a message broker. |
 
 ### Milestone 10 — GraphQL extension
 
@@ -291,7 +382,7 @@ Start with explicit permissions instead of hard-coding role names everywhere:
 | M10-02 | Add GraphQL schema | Model dashboard analytics read operations. |
 | M10-03 | Add GraphQL endpoint | Expose read-only analytics endpoint. |
 | M10-04 | Add GraphQL authorization | Reuse server-side permission policies in resolvers. |
-| M10-05 | Add GraphQL tests | Test queries and auth behavior. |
+| M10-05 | Add GraphQL tests | Test queries, auth, and tenant isolation behavior. |
 | M10-06 | Compare REST vs GraphQL | Document tradeoffs in architecture notes. |
 
 ### Milestone 11 — Cloudflare deployment spike
@@ -302,17 +393,18 @@ Start with explicit permissions instead of hard-coding role names everywhere:
 | M11-02 | Test Cloudflare deploy | Deploy a branch to Cloudflare Workers. |
 | M11-03 | Validate auth/runtime | Check auth, DB connection, middleware behavior. |
 | M11-04 | Validate RBAC/runtime | Confirm permission checks behave correctly after deploy. |
-| M11-05 | Compare with Vercel | Document DX, limits, cost, and blockers. |
-| M11-06 | Decide hosting target | Keep Vercel or switch to Cloudflare. |
+| M11-05 | Validate API-key ingestion | Confirm ingestion endpoint works in target runtime. |
+| M11-06 | Compare with Vercel | Document DX, limits, cost, and blockers. |
+| M11-07 | Decide hosting target | Keep Vercel or switch to Cloudflare. |
 
 ## Recommended implementation order
 
 1. M0 project setup
 2. M1 database foundation
 3. M2 authentication
-4. M3 dashboard shell, RBAC, and architecture notes
-5. M4 ingestion API
-6. M5 analytics queries
+4. M3 workspace, RBAC, app shell, and architecture notes
+5. M4 project management and ingestion API
+6. M5 analytics queries and dashboard UI
 7. M6 tests
 8. M7 deployment
 9. M8 portfolio polish
@@ -328,8 +420,11 @@ Start with explicit permissions instead of hard-coding role names everywhere:
 - Keep tickets small enough for one focused branch/PR.
 - Do not introduce Kafka, Redis, background queues, or a separate API service before the MVP is stable.
 - RBAC must be enforced on the server; UI checks are only for UX.
+- Tenant isolation must be enforced in queries and use cases, not only in route params.
 - Do not let React components import database code directly.
 - Do not let route handlers become large business-logic files.
+- Do not expose raw database rows as public API responses.
+- Do not add GraphQL until the REST/product flow is stable.
 - If a feature does not improve learning, portfolio value, or product realism, defer it.
 
 ## First useful next step

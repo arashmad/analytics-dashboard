@@ -40,3 +40,37 @@ pnpm db:logs
 
 Default local connection string:
 `DATABASE_URL=postgresql://analytics_dashboard:analytics_dashboard@localhost:5434/analytics_dashboard`
+
+## Drizzle
+
+Drizzle ORM and Drizzle Kit are used for type-safe PostgreSQL access and migrations.
+
+Generate migrations:
+
+```bash
+pnpm db:generate
+```
+
+Run migrations:
+
+```bash
+pnpm db:migrate
+```
+
+Open Drizzle Studio:
+
+```bash
+pnpm db:studio
+```
+
+Schema entrypoint:
+
+```bash
+db/schema.ts
+```
+
+Migration output:
+
+```bash
+drizzle/
+```

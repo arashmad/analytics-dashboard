@@ -235,167 +235,167 @@ Start with explicit permissions instead of hard-coding role names everywhere:
 
 ### Milestone 0 — Project setup
 
-| ID | Ticket | Short description |
-|---|---|---|
-| M0-01 | Bootstrap Next.js app | Create Next.js TypeScript app with App Router. |
-| M0-02 | Add base tooling | Configure ESLint, Prettier, TypeScript strict mode. |
-| M0-03 | Add UI foundation | Install Tailwind and shadcn/ui base components. |
-| M0-04 | Add project structure | Create folders for app, components, lib, db, tests. |
-| M0-05 | Add local env handling | Add `.env.example` and typed env validation. |
+| ID    | Ticket                 | Short description                                   |
+| ----- | ---------------------- | --------------------------------------------------- |
+| M0-01 | Bootstrap Next.js app  | Create Next.js TypeScript app with App Router.      |
+| M0-02 | Add base tooling       | Configure ESLint, Prettier, TypeScript strict mode. |
+| M0-03 | Add UI foundation      | Install Tailwind and shadcn/ui base components.     |
+| M0-04 | Add project structure  | Create folders for app, components, lib, db, tests. |
+| M0-05 | Add local env handling | Add `.env.example` and typed env validation.        |
 
 ### Milestone 1 — Database foundation
 
-| ID | Ticket | Short description |
-|---|---|---|
-| M1-01 | Add Docker Postgres | Add local PostgreSQL via Docker Compose. |
-| M1-02 | Add Drizzle | Configure Drizzle ORM and Drizzle Kit. |
+| ID    | Ticket                 | Short description                             |
+| ----- | ---------------------- | --------------------------------------------- |
+| M1-01 | Add Docker Postgres    | Add local PostgreSQL via Docker Compose.      |
+| M1-02 | Add Drizzle            | Configure Drizzle ORM and Drizzle Kit.        |
 | M1-03 | Create first migration | Add users, workspaces, projects, memberships. |
-| M1-04 | Add seed script | Generate demo workspace/project data. |
-| M1-05 | Add DB health check | Add API route that validates DB connection. |
+| M1-04 | Add seed script        | Generate demo workspace/project data.         |
+| M1-05 | Add DB health check    | Add API route that validates DB connection.   |
 
 ### Milestone 2 — Authentication
 
-| ID | Ticket | Short description |
-|---|---|---|
-| M2-01 | Choose auth library | Compare Better Auth vs Auth.js and decide. |
-| M2-02 | Register user | Implement email/password registration. |
-| M2-03 | Login user | Implement login form and session handling. |
-| M2-04 | Logout user | Implement logout and redirect behavior. |
-| M2-05 | Protect app routes | Block dashboard routes for anonymous users. |
-| M2-06 | Forgot password | Add password reset request flow. |
-| M2-07 | Reset password | Add token-based password reset page. |
+| ID    | Ticket              | Short description                           |
+| ----- | ------------------- | ------------------------------------------- |
+| M2-01 | Choose auth library | Compare Better Auth vs Auth.js and decide.  |
+| M2-02 | Register user       | Implement email/password registration.      |
+| M2-03 | Login user          | Implement login form and session handling.  |
+| M2-04 | Logout user         | Implement logout and redirect behavior.     |
+| M2-05 | Protect app routes  | Block dashboard routes for anonymous users. |
+| M2-06 | Forgot password     | Add password reset request flow.            |
+| M2-07 | Reset password      | Add token-based password reset page.        |
 
 ### Milestone 3 — Workspace, RBAC, app shell, and dashboard foundation
 
-| ID | Ticket | Short description |
-|---|---|---|
-| M3-01 | Build app layout | Add sidebar, top nav, account menu, and protected app shell. |
-| M3-02 | Add workspace switcher | Let authenticated users switch active workspace. |
-| M3-03 | Define RBAC model | Add roles, permissions, and role-to-permission mapping. |
-| M3-04 | Add permission matrix | Document which permissions belong to each role. |
-| M3-05 | Add authorization helpers | Add server-side permission helpers for workspace/project access. |
-| M3-06 | Add tenant isolation helpers | Centralize workspace/project scoping checks. |
-| M3-07 | Add member list | Show workspace members and their roles. |
-| M3-08 | Invite workspace member | Let permitted users invite members by email. |
-| M3-09 | Accept workspace invite | Let invited users accept valid invitations. |
-| M3-10 | Change member role | Let permitted users update member roles safely. |
-| M3-11 | Remove workspace member | Let permitted users remove members safely. |
-| M3-12 | Protect owner safety rules | Prevent removing/downgrading the last owner. |
-| M3-13 | Add role-aware navigation | Show/hide navigation and actions based on permissions. |
-| M3-14 | Add dashboard route | Create protected dashboard home page placeholder. |
-| M3-15 | Add loading/error states | Standardize empty, loading, forbidden, not-found, and error UI. |
-| M3-16 | Add architecture notes | Document feature layers, dependency direction, server/client rules, and RBAC decisions. |
+| ID    | Ticket                       | Short description                                                                       |
+| ----- | ---------------------------- | --------------------------------------------------------------------------------------- |
+| M3-01 | Build app layout             | Add sidebar, top nav, account menu, and protected app shell.                            |
+| M3-02 | Add workspace switcher       | Let authenticated users switch active workspace.                                        |
+| M3-03 | Define RBAC model            | Add roles, permissions, and role-to-permission mapping.                                 |
+| M3-04 | Add permission matrix        | Document which permissions belong to each role.                                         |
+| M3-05 | Add authorization helpers    | Add server-side permission helpers for workspace/project access.                        |
+| M3-06 | Add tenant isolation helpers | Centralize workspace/project scoping checks.                                            |
+| M3-07 | Add member list              | Show workspace members and their roles.                                                 |
+| M3-08 | Invite workspace member      | Let permitted users invite members by email.                                            |
+| M3-09 | Accept workspace invite      | Let invited users accept valid invitations.                                             |
+| M3-10 | Change member role           | Let permitted users update member roles safely.                                         |
+| M3-11 | Remove workspace member      | Let permitted users remove members safely.                                              |
+| M3-12 | Protect owner safety rules   | Prevent removing/downgrading the last owner.                                            |
+| M3-13 | Add role-aware navigation    | Show/hide navigation and actions based on permissions.                                  |
+| M3-14 | Add dashboard route          | Create protected dashboard home page placeholder.                                       |
+| M3-15 | Add loading/error states     | Standardize empty, loading, forbidden, not-found, and error UI.                         |
+| M3-16 | Add architecture notes       | Document feature layers, dependency direction, server/client rules, and RBAC decisions. |
 
 ### Milestone 4 — Project and analytics ingestion API
 
-| ID | Ticket | Short description |
-|---|---|---|
-| M4-01 | Add project management | Let permitted users create/update/archive projects. |
-| M4-02 | Add API key model | Store hashed project API keys with project-level scope. |
-| M4-03 | Create API key UI | Let permitted users create/revoke project API keys. |
-| M4-04 | Add event schema | Create events and sessions tables. |
-| M4-05 | Add API contracts | Define Zod schemas and response DTOs for project/API-key/event routes. |
-| M4-06 | Add ingest endpoint | Implement `POST /api/events` with API key auth. |
-| M4-07 | Validate event payloads | Validate payloads with Zod at the API boundary. |
-| M4-08 | Add ingestion policy | Keep user RBAC separate from API-key ingestion authorization. |
-| M4-09 | Add audit log basics | Track project/API-key/member security actions. |
-| M4-10 | Add demo event generator | Generate fake traffic for dashboard testing. |
+| ID    | Ticket                   | Short description                                                      |
+| ----- | ------------------------ | ---------------------------------------------------------------------- |
+| M4-01 | Add project management   | Let permitted users create/update/archive projects.                    |
+| M4-02 | Add API key model        | Store hashed project API keys with project-level scope.                |
+| M4-03 | Create API key UI        | Let permitted users create/revoke project API keys.                    |
+| M4-04 | Add event schema         | Create events and sessions tables.                                     |
+| M4-05 | Add API contracts        | Define Zod schemas and response DTOs for project/API-key/event routes. |
+| M4-06 | Add ingest endpoint      | Implement `POST /api/events` with API key auth.                        |
+| M4-07 | Validate event payloads  | Validate payloads with Zod at the API boundary.                        |
+| M4-08 | Add ingestion policy     | Keep user RBAC separate from API-key ingestion authorization.          |
+| M4-09 | Add audit log basics     | Track project/API-key/member security actions.                         |
+| M4-10 | Add demo event generator | Generate fake traffic for dashboard testing.                           |
 
 ### Milestone 5 — Analytics queries and dashboard UI
 
-| ID | Ticket | Short description |
-|---|---|---|
-| M5-01 | Add analytics repository | Keep SQL/Drizzle analytics queries inside data layer. |
-| M5-02 | Add query indexes | Add useful indexes for workspace/project/time/event queries. |
-| M5-03 | Event volume query | Aggregate events by time bucket. |
-| M5-04 | Active users query | Calculate daily/weekly active users. |
-| M5-05 | Top events query | List most common event names. |
-| M5-06 | Session metrics query | Calculate sessions and average duration. |
-| M5-07 | Conversion summary | Calculate simple signup-to-action conversion. |
-| M5-08 | Dashboard API routes | Expose analytics through use cases and permission checks. |
-| M5-09 | Add metric cards | Show users, sessions, events, conversion. |
-| M5-10 | Add chart components | Add time-series and breakdown charts. |
-| M5-11 | Add data table | Add recent events table with sorting, filtering, pagination. |
-| M5-12 | Add data-fetching strategy | Document server fetch vs TanStack Query usage. |
+| ID    | Ticket                     | Short description                                            |
+| ----- | -------------------------- | ------------------------------------------------------------ |
+| M5-01 | Add analytics repository   | Keep SQL/Drizzle analytics queries inside data layer.        |
+| M5-02 | Add query indexes          | Add useful indexes for workspace/project/time/event queries. |
+| M5-03 | Event volume query         | Aggregate events by time bucket.                             |
+| M5-04 | Active users query         | Calculate daily/weekly active users.                         |
+| M5-05 | Top events query           | List most common event names.                                |
+| M5-06 | Session metrics query      | Calculate sessions and average duration.                     |
+| M5-07 | Conversion summary         | Calculate simple signup-to-action conversion.                |
+| M5-08 | Dashboard API routes       | Expose analytics through use cases and permission checks.    |
+| M5-09 | Add metric cards           | Show users, sessions, events, conversion.                    |
+| M5-10 | Add chart components       | Add time-series and breakdown charts.                        |
+| M5-11 | Add data table             | Add recent events table with sorting, filtering, pagination. |
+| M5-12 | Add data-fetching strategy | Document server fetch vs TanStack Query usage.               |
 
 ### Milestone 6 — Testing workflow
 
-| ID | Ticket | Short description |
-|---|---|---|
-| M6-01 | Unit test setup | Add Vitest and first utility tests. |
-| M6-02 | Component tests | Add React Testing Library examples. |
-| M6-03 | API integration tests | Test route handlers against test DB. |
-| M6-04 | DB migration tests | Verify migrations run on clean database. |
-| M6-05 | Authorization tests | Test role/permission positive and negative cases. |
-| M6-06 | Tenant isolation tests | Test that users cannot access another workspace/project. |
-| M6-07 | Owner safety tests | Test last-owner and owner downgrade/remove protections. |
-| M6-08 | E2E setup | Add Playwright for auth, RBAC, workspace, and dashboard flows. |
-| M6-09 | Test data factories | Add reusable test factories/fixtures. |
-| M6-10 | Boundary checks | Add lightweight checks or conventions for layer imports. |
+| ID    | Ticket                 | Short description                                              |
+| ----- | ---------------------- | -------------------------------------------------------------- |
+| M6-01 | Unit test setup        | Add Vitest and first utility tests.                            |
+| M6-02 | Component tests        | Add React Testing Library examples.                            |
+| M6-03 | API integration tests  | Test route handlers against test DB.                           |
+| M6-04 | DB migration tests     | Verify migrations run on clean database.                       |
+| M6-05 | Authorization tests    | Test role/permission positive and negative cases.              |
+| M6-06 | Tenant isolation tests | Test that users cannot access another workspace/project.       |
+| M6-07 | Owner safety tests     | Test last-owner and owner downgrade/remove protections.        |
+| M6-08 | E2E setup              | Add Playwright for auth, RBAC, workspace, and dashboard flows. |
+| M6-09 | Test data factories    | Add reusable test factories/fixtures.                          |
+| M6-10 | Boundary checks        | Add lightweight checks or conventions for layer imports.       |
 
 ### Milestone 7 — CI/CD and deployment
 
-| ID | Ticket | Short description |
-|---|---|---|
-| M7-01 | Add CI workflow | Run lint, typecheck, unit tests on PRs. |
-| M7-02 | Add integration workflow | Run DB-backed tests with PostgreSQL service. |
-| M7-03 | Add E2E workflow | Run Playwright in CI for core flows. |
-| M7-04 | Add authorization checks to CI | Ensure permission and tenant-isolation tests run in CI. |
-| M7-05 | Configure Neon | Create demo database and env variables. |
-| M7-06 | Configure Vercel deploy | Connect repo and deploy `main`. |
-| M7-07 | Add preview deploy notes | Document PR preview deployment behavior. |
-| M7-08 | Add deployment smoke check | Validate auth, DB, and dashboard route after deployment. |
-| M7-09 | Add release checklist | Define pre-merge and pre-release checks. |
+| ID    | Ticket                         | Short description                                        |
+| ----- | ------------------------------ | -------------------------------------------------------- |
+| M7-01 | Add CI workflow                | Run lint, typecheck, unit tests on PRs.                  |
+| M7-02 | Add integration workflow       | Run DB-backed tests with PostgreSQL service.             |
+| M7-03 | Add E2E workflow               | Run Playwright in CI for core flows.                     |
+| M7-04 | Add authorization checks to CI | Ensure permission and tenant-isolation tests run in CI.  |
+| M7-05 | Configure Neon                 | Create demo database and env variables.                  |
+| M7-06 | Configure Vercel deploy        | Connect repo and deploy `main`.                          |
+| M7-07 | Add preview deploy notes       | Document PR preview deployment behavior.                 |
+| M7-08 | Add deployment smoke check     | Validate auth, DB, and dashboard route after deployment. |
+| M7-09 | Add release checklist          | Define pre-merge and pre-release checks.                 |
 
 ### Milestone 8 — Portfolio polish
 
-| ID | Ticket | Short description |
-|---|---|---|
-| M8-01 | Add landing page | Explain product and demo use case. |
-| M8-02 | Add demo mode | Let visitors explore seeded analytics safely. |
-| M8-03 | Add role demo accounts | Provide demo users for owner/admin/analyst/viewer roles. |
-| M8-04 | Add audit log demo | Show selected audit events in the UI. |
-| M8-05 | Add README | Document stack, setup, tests, deployment. |
-| M8-06 | Add architecture notes | Document app/data/auth/RBAC/deployment decisions. |
-| M8-07 | Add performance notes | Document indexes, pagination, and one analytics query decision. |
-| M8-08 | Add screenshots | Add dashboard screenshots for GitHub. |
-| M8-09 | Add portfolio summary | Write concise case-study style summary. |
-| M8-10 | Add accessibility pass | Check keyboard navigation, labels, responsive states. |
+| ID    | Ticket                 | Short description                                               |
+| ----- | ---------------------- | --------------------------------------------------------------- |
+| M8-01 | Add landing page       | Explain product and demo use case.                              |
+| M8-02 | Add demo mode          | Let visitors explore seeded analytics safely.                   |
+| M8-03 | Add role demo accounts | Provide demo users for owner/admin/analyst/viewer roles.        |
+| M8-04 | Add audit log demo     | Show selected audit events in the UI.                           |
+| M8-05 | Add README             | Document stack, setup, tests, deployment.                       |
+| M8-06 | Add architecture notes | Document app/data/auth/RBAC/deployment decisions.               |
+| M8-07 | Add performance notes  | Document indexes, pagination, and one analytics query decision. |
+| M8-08 | Add screenshots        | Add dashboard screenshots for GitHub.                           |
+| M8-09 | Add portfolio summary  | Write concise case-study style summary.                         |
+| M8-10 | Add accessibility pass | Check keyboard navigation, labels, responsive states.           |
 
 ### Milestone 9 — Event-driven extension
 
-| ID | Ticket | Short description |
-|---|---|---|
-| M9-01 | Add outbox table | Store domain events for async processing. |
-| M9-02 | Emit event-created event | Write outbox record during ingestion. |
-| M9-03 | Emit audit events | Write selected audit events through the same pattern. |
-| M9-04 | Add worker route/job | Process pending outbox records. |
-| M9-05 | Add derived metrics table | Precompute selected analytics metrics. |
-| M9-06 | Add retry handling | Track attempts and failed event processing. |
+| ID    | Ticket                      | Short description                                        |
+| ----- | --------------------------- | -------------------------------------------------------- |
+| M9-01 | Add outbox table            | Store domain events for async processing.                |
+| M9-02 | Emit event-created event    | Write outbox record during ingestion.                    |
+| M9-03 | Emit audit events           | Write selected audit events through the same pattern.    |
+| M9-04 | Add worker route/job        | Process pending outbox records.                          |
+| M9-05 | Add derived metrics table   | Precompute selected analytics metrics.                   |
+| M9-06 | Add retry handling          | Track attempts and failed event processing.              |
 | M9-07 | Add event architecture note | Document why outbox is used instead of a message broker. |
 
 ### Milestone 10 — GraphQL extension
 
-| ID | Ticket | Short description |
-|---|---|---|
-| M10-01 | Add GraphQL spike | Compare Yoga/Apollo for Next.js Route Handler. |
-| M10-02 | Add GraphQL schema | Model dashboard analytics read operations. |
-| M10-03 | Add GraphQL endpoint | Expose read-only analytics endpoint. |
+| ID     | Ticket                    | Short description                                   |
+| ------ | ------------------------- | --------------------------------------------------- |
+| M10-01 | Add GraphQL spike         | Compare Yoga/Apollo for Next.js Route Handler.      |
+| M10-02 | Add GraphQL schema        | Model dashboard analytics read operations.          |
+| M10-03 | Add GraphQL endpoint      | Expose read-only analytics endpoint.                |
 | M10-04 | Add GraphQL authorization | Reuse server-side permission policies in resolvers. |
-| M10-05 | Add GraphQL tests | Test queries, auth, and tenant isolation behavior. |
-| M10-06 | Compare REST vs GraphQL | Document tradeoffs in architecture notes. |
+| M10-05 | Add GraphQL tests         | Test queries, auth, and tenant isolation behavior.  |
+| M10-06 | Compare REST vs GraphQL   | Document tradeoffs in architecture notes.           |
 
 ### Milestone 11 — Cloudflare deployment spike
 
-| ID | Ticket | Short description |
-|---|---|---|
-| M11-01 | Review Cloudflare support | Check OpenNext compatibility for current app. |
-| M11-02 | Test Cloudflare deploy | Deploy a branch to Cloudflare Workers. |
-| M11-03 | Validate auth/runtime | Check auth, DB connection, middleware behavior. |
-| M11-04 | Validate RBAC/runtime | Confirm permission checks behave correctly after deploy. |
-| M11-05 | Validate API-key ingestion | Confirm ingestion endpoint works in target runtime. |
-| M11-06 | Compare with Vercel | Document DX, limits, cost, and blockers. |
-| M11-07 | Decide hosting target | Keep Vercel or switch to Cloudflare. |
+| ID     | Ticket                     | Short description                                        |
+| ------ | -------------------------- | -------------------------------------------------------- |
+| M11-01 | Review Cloudflare support  | Check OpenNext compatibility for current app.            |
+| M11-02 | Test Cloudflare deploy     | Deploy a branch to Cloudflare Workers.                   |
+| M11-03 | Validate auth/runtime      | Check auth, DB connection, middleware behavior.          |
+| M11-04 | Validate RBAC/runtime      | Confirm permission checks behave correctly after deploy. |
+| M11-05 | Validate API-key ingestion | Confirm ingestion endpoint works in target runtime.      |
+| M11-06 | Compare with Vercel        | Document DX, limits, cost, and blockers.                 |
+| M11-07 | Decide hosting target      | Keep Vercel or switch to Cloudflare.                     |
 
 ## Recommended implementation order
 

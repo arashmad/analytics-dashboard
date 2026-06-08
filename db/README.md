@@ -74,3 +74,20 @@ Migration output:
 ```bash
 drizzle/
 ```
+
+## First schema
+
+The first migration creates the core SaaS foundation:
+
+- `users`
+- `workspaces`
+- `workspace_members`
+- `projects`
+
+The schema intentionally stays auth-library-neutral. Passwords, sessions, accounts, and reset tokens belong to the later authentication milestone.
+
+Generate migrations:
+
+```bash
+pnpm db:generate
+```

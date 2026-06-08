@@ -91,3 +91,11 @@ Generate migrations:
 ```bash
 pnpm db:generate
 ```
+
+## Seed data
+
+Seed the local database with deterministic demo data:
+
+````bash
+pnpm db:seed```
+````

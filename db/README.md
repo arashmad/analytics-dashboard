@@ -99,3 +99,9 @@ Seed the local database with deterministic demo data:
 ````bash
 pnpm db:seed```
 ````
+
+## Authentication schema note
+
+Authentication will use Better Auth. The existing `users` table must be aligned with Better Auth's user model before registration is implemented.
+
+Workspace authorization remains application-owned through `workspace_members`.

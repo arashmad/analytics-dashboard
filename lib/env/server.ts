@@ -7,7 +7,7 @@ const serverEnvSchema = z.object({
   APP_URL: z.string().url().default("http://localhost:3000"),
   DATABASE_URL: z.url(),
   BETTER_AUTH_SECRET: z.string().min(32),
-  BETTER_AUT_URL: z.url().default("http://localhost:3000"),
+  BETTER_AUTH_URL: z.url().default("http://localhost:3000"),
 });
 
 const parsedServerEnv = serverEnvSchema.safeParse({

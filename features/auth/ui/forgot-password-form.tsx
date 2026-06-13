@@ -1,26 +1,23 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
   Card,
-  CardHeader,
   CardContent,
   CardDescription,
+  CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { clientEnv } from "@/lib/env/client";
 import { authClient } from "@/lib/auth-client";
 
-import type { FormStatus } from "./type";
+type FormStatus = "idle" | "loading" | "success" | "error";
 
-export function LoginForm() {
-  const router = useRouter();
-
+export function ForgotPasswordForm() {
   const [email, setEmail] = useState("new.user@example.com");
-  const [password, setPassword] = useState("password123");
   const [status, setStatus] = useState<FormStatus>("idle");
   const [message, setMessage] = useState<string | null>(null);
 
@@ -30,29 +27,30 @@ export function LoginForm() {
     setStatus("loading");
     setMessage(null);
 
-    const { error } = await authClient.signIn.email({
+    const { error } = await authClient.requestPasswordReset({
       email,
-      password,
-      rememberMe: true,
+      redirectTo: `${clientEnv.NEXT_PUBLIC_APP_URL}/reset-password`,
     });
 
     if (error) {
       setStatus("error");
-      setMessage(error.message ?? "Login failed.");
+      setMessage(error.message ?? "Password reset request failed.");
       return;
     }
 
     setStatus("success");
-    setMessage("Logged in successfully.");
-    router.push("/dashboard");
-    router.refresh();
+    setMessage(
+      "If an account exists for this email, a password reset link has been sent.",
+    );
   }
 
   return (
     <Card className="w-full max-w-md">
       <CardHeader>
-        <CardTitle>Log in</CardTitle>
-        <CardDescription>Access your InsightPulse account.</CardDescription>
+        <CardTitle>Forgot password</CardTitle>
+        <CardDescription>
+          Request a password reset link for your account.
+        </CardDescription>
       </CardHeader>
 
       <CardContent>
@@ -72,55 +70,33 @@ export function LoginForm() {
             />
           </div>
 
-          <div className="space-y-2">
-            <label className="text-sm font-medium" htmlFor="password">
-              Password
-            </label>
-            <input
-              className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-              id="password"
-              minLength={8}
-              name="password"
-              required
-              type="password"
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
-            />
-          </div>
-
           <Button
             className="w-full"
             disabled={status === "loading"}
             type="submit"
           >
-            {status === "loading" ? "Logging in..." : "Log in"}
+            {status === "loading" ? "Sending reset link..." : "Send reset link"}
           </Button>
 
-          {message && (
+          {message ? (
             <p
-              className={`text-sm ${status === "error" ? "text-destructive" : "text-muted-foreground"}`}
+              className={
+                status === "error"
+                  ? "text-sm text-destructive"
+                  : "text-sm text-muted-foreground"
+              }
             >
               {message}
             </p>
-          )}
+          ) : null}
 
-          <p className="text-sm text-muted-foreground m-0">
-            Forgot your password?{" "}
+          <p className="text-sm text-muted-foreground">
+            Remembered your password?{" "}
             <Link
               className="font-medium text-foreground underline"
-              href="/forgot-password"
+              href="/login"
             >
-              Reset it
-            </Link>
-          </p>
-
-          <p className="text-sm text-muted-foreground m-0">
-            No account yet?{" "}
-            <Link
-              className="font-medium text-foreground underline"
-              href="/register"
-            >
-              Create one
+              Log in
             </Link>
           </p>
         </form>

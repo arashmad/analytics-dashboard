@@ -5,6 +5,8 @@ import { db } from "@/db/client";
 import * as schema from "@/db/schema";
 import { serverEnv } from "./env/server";
 
+import { sendResetPasswordEmail } from "@/lib/auth/reset-password-email";
+
 export const auth = betterAuth({
   baseURL: serverEnv.BETTER_AUTH_URL,
   secret: serverEnv.BETTER_AUTH_SECRET,
@@ -18,7 +20,15 @@ export const auth = betterAuth({
       verification: schema.verifications,
     },
   }),
-  emailAndPassword: { enabled: true },
+  emailAndPassword: {
+    enabled: true,
+    sendResetPassword: async ({ user, url }) => {
+      void sendResetPasswordEmail({
+        email: user.email,
+        resetUrl: url,
+      });
+    },
+  },
   user: { modelName: "users" },
   session: { modelName: "sessions" },
   account: { modelName: "accounts" },

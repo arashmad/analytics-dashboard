@@ -40,7 +40,7 @@ export function RegisterForm() {
     }
 
     setStatus("success");
-    setMessage("Account created. Login will be added in the next ticket");
+    setMessage("Account created. You can now log in.");
   }
 
   return (

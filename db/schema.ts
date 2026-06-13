@@ -15,13 +15,25 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 
-export const workspaceRoleEnum = pgEnum("workspace_role", ["owner", "admin", "analyst", "viewer"]);
+export const workspaceRoleEnum = pgEnum("workspace_role", [
+  "owner",
+  "admin",
+  "analyst",
+  "viewer",
+]);
 
-export const projectStatusEnum = pgEnum("project_status", ["active", "archived"]);
+export const projectStatusEnum = pgEnum("project_status", [
+  "active",
+  "archived",
+]);
 
 const timestamps = {
-  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
-  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .defaultNow()
+    .notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true })
+    .defaultNow()
+    .notNull(),
 };
 
 export const users = pgTable(
@@ -67,8 +79,12 @@ export const accounts = pgTable(
     providerId: text("provider_id").notNull(),
     accessToken: text("access_token"),
     refreshToken: text("refresh_token"),
-    accessTokenExpiresAt: timestamp("access_token_expires_at", { withTimezone: true }),
-    refreshTokenExpiresAt: timestamp("refresh_token_expires_at", { withTimezone: true }),
+    accessTokenExpiresAt: timestamp("access_token_expires_at", {
+      withTimezone: true,
+    }),
+    refreshTokenExpiresAt: timestamp("refresh_token_expires_at", {
+      withTimezone: true,
+    }),
     scope: text("scope"),
     idToken: text("id_token"),
     password: text("password"),
@@ -76,7 +92,10 @@ export const accounts = pgTable(
   },
   (table) => [
     index("accounts_user_id_idx").on(table.userId),
-    uniqueIndex("accounts_provider_id_account_id_unique_idx").on(table.providerId, table.accountId),
+    uniqueIndex("accounts_provider_id_account_id_unique_idx").on(
+      table.providerId,
+      table.accountId,
+    ),
   ],
 );
 
@@ -123,7 +142,9 @@ export const workspaceMembers = pgTable(
     invitedById: uuid("invited_by_id").references(() => users.id, {
       onDelete: "set null",
     }),
-    joinedAt: timestamp("joined_at", { withTimezone: true }).defaultNow().notNull(),
+    joinedAt: timestamp("joined_at", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
     ...timestamps,
   },
   (table) => [
@@ -154,7 +175,10 @@ export const projects = pgTable(
     ...timestamps,
   },
   (table) => [
-    uniqueIndex("projects_workspace_id_slug_unique_idx").on(table.workspaceId, table.slug),
+    uniqueIndex("projects_workspace_id_slug_unique_idx").on(
+      table.workspaceId,
+      table.slug,
+    ),
     index("projects_workspace_id_idx").on(table.workspaceId),
     index("projects_created_by_id_idx").on(table.createdById),
     index("projects_status_idx").on(table.status),

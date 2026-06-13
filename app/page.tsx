@@ -2,7 +2,13 @@ import { clientEnv } from "@/lib/env/client";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 const metrics = [
   { label: "Events tracked", value: "24.8K" },
@@ -24,8 +30,8 @@ export default function Home() {
               InsightPulse analytics dashboard
             </h1>
             <p className="max-w-2xl text-muted-foreground">
-              A portfolio-grade product analytics dashboard built with Next.js, React, TypeScript,
-              Tailwind CSS, and shadcn/ui.
+              A portfolio-grade product analytics dashboard built with Next.js,
+              React, TypeScript, Tailwind CSS, and shadcn/ui.
             </p>
           </div>
 
@@ -50,7 +56,9 @@ export default function Home() {
             </Card>
           ))}
         </div>
-        <p className="text-sm text-muted-foreground">Running at {clientEnv.NEXT_PUBLIC_APP_URL}</p>
+        <p className="text-sm text-muted-foreground">
+          Running at {clientEnv.NEXT_PUBLIC_APP_URL}
+        </p>
       </section>
     </main>
   );

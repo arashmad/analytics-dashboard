@@ -12,7 +12,11 @@ services:
     volumes:
       - analytics_dashboard_postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U analytics_dashboard -d analytics_dashboard"]
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U analytics_dashboard -d analytics_dashboard",
+        ]
       interval: 10s
       timeout: 5s
       retries: 5

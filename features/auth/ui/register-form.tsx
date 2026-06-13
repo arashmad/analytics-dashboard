@@ -10,7 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { autClient } from "@/lib/auth-client";
+import { authClient } from "@/lib/auth-client";
 
 type formStatus = "idle" | "loading" | "success" | "error";
 
@@ -27,7 +27,7 @@ export function RegisterForm() {
     setStatus("loading");
     setMessage(null);
 
-    const { error } = await autClient.signUp.email({
+    const { error } = await authClient.signUp.email({
       name,
       email,
       password,

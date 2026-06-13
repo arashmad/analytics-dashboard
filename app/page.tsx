@@ -1,5 +1,7 @@
 import { clientEnv } from "@/lib/env/client";
 
+import { AuthStatusCard } from "@/features/auth/ui/auth-status-card";
+
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -40,6 +42,8 @@ export default function Home() {
             <Button variant="outline">Read plan</Button>
           </div>
         </div>
+
+        <AuthStatusCard />
 
         <div className="grid gap-4 sm:grid-cols-3">
           {metrics.map((metric) => (

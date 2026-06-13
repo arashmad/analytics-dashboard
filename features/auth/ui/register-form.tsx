@@ -44,7 +44,7 @@ export function RegisterForm() {
   }
 
   return (
-    <Card className="w-full max-h-md">
+    <Card className="w-full max-w-md">
       <CardHeader>
         <CardTitle>Create Account</CardTitle>
         <CardDescription>

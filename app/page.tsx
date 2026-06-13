@@ -1,7 +1,4 @@
-import { clientEnv } from "@/lib/env/client";
-
-import { AuthStatusCard } from "@/features/auth/ui/auth-status-card";
-
+import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,6 +8,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+
+import { clientEnv } from "@/lib/env/client";
+import { AuthStatusCard } from "@/features/auth/ui/auth-status-card";
 
 const metrics = [
   { label: "Events tracked", value: "24.8K" },
@@ -38,7 +38,9 @@ export default function Home() {
           </div>
 
           <div className="flex gap-3">
-            <Button>View dashboard</Button>
+            <Button asChild>
+              <Link href="/dashboard">View dashboard</Link>
+            </Button>
             <Button variant="outline">Read plan</Button>
           </div>
         </div>

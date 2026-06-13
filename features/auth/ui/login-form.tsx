@@ -44,7 +44,7 @@ export function LoginForm() {
 
     setStatus("success");
     setMessage("Logged in successfully.");
-    router.push("/");
+    router.push("/dashboard");
     router.refresh();
   }
 

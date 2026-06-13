@@ -8,6 +8,13 @@
       "when": 1780947934299,
       "tag": "0000_massive_psylocke",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1781345609222,
+      "tag": "0001_thin_maggott",
+      "breakpoints": true
     }
   ]
 }

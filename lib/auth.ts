@@ -28,6 +28,9 @@ export const auth = betterAuth({
         resetUrl: url,
       });
     },
+    onPasswordReset: async ({ user }) => {
+      console.info(`Password reset completed for ${user.email}.`);
+    },
   },
   user: { modelName: "users" },
   session: { modelName: "sessions" },

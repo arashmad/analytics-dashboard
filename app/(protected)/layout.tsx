@@ -1,3 +1,4 @@
+import { AppShell } from "@/features/app-shell/ui/app-shell";
 import { requireSession } from "@/lib/auth/session";
 
 export default async function ProtectedLayout({
@@ -7,5 +8,5 @@ export default async function ProtectedLayout({
 }>) {
   await requireSession();
 
-  return children;
+  return <AppShell>{children}</AppShell>;
 }

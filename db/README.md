@@ -1,32 +1,33 @@
 # db
 
-Database code will live here.
+Database-related code lives here.
 
-Future contents:
+This folder owns:
 
-- database client setup
 - Drizzle schema
+- database client setup
 - migrations
-- seed scripts
-- database test helpers when needed
-
-This ticket only creates the placeholder structure. Drizzle, PostgreSQL configuration, migrations, and seed scripts belong to later database tickets.
+- local seed data
+- database health helpers
+- future database test helpers
 
 ## Local PostgreSQL
 
-Start the local database:
+The local database runs through Docker Compose.
+
+Start the database:
 
 ```bash
 pnpm db:up
 ```
 
-Stop it:
+Stop the database:
 
 ```bash
 pnpm db:down
 ```
 
-Reset it and delete local data:
+Reset local data:
 
 ```bash
 pnpm db:reset
@@ -39,11 +40,26 @@ pnpm db:logs
 ```
 
 Default local connection string:
-`DATABASE_URL=postgresql://analytics_dashboard:analytics_dashboard@localhost:5434/analytics_dashboard`
+
+```env
+DATABASE_URL=postgresql://analytics_dashboard:analytics_dashboard@localhost:5434/analytics_dashboard
+```
 
 ## Drizzle
 
 Drizzle ORM and Drizzle Kit are used for type-safe PostgreSQL access and migrations.
+
+Schema entrypoint:
+
+```text
+db/schema.ts
+```
+
+Migration output:
+
+```text
+drizzle/
+```
 
 Generate migrations:
 
@@ -63,45 +79,42 @@ Open Drizzle Studio:
 pnpm db:studio
 ```
 
-Schema entrypoint:
+## Seed data
+
+Seed the local database with deterministic demo data:
 
 ```bash
-db/schema.ts
+pnpm db:seed
 ```
 
-Migration output:
+The seed data is used for local development and manual testing.
+
+## Database health check
+
+Run the local database health check script:
 
 ```bash
-drizzle/
+pnpm db:check
 ```
 
-## First schema
+The app also exposes a database health route for local and deployment validation.
 
-The first migration creates the core SaaS foundation:
+## Current schema
+
+The database currently includes the core SaaS foundation:
 
 - `users`
 - `workspaces`
 - `workspace_members`
 - `projects`
 
-The schema intentionally stays auth-library-neutral. Passwords, sessions, accounts, and reset tokens belong to the later authentication milestone.
-
-Generate migrations:
-
-```bash
-pnpm db:generate
-```
-
-## Seed data
-
-Seed the local database with deterministic demo data:
-
-````bash
-pnpm db:seed```
-````
-
-## Authentication schema note
-
-Authentication will use Better Auth. The existing `users` table must be aligned with Better Auth's user model before registration is implemented.
+Authentication uses Better Auth with PostgreSQL/Drizzle and adds auth-related persistence for sessions, accounts, and verification/reset flows.
 
 Workspace authorization remains application-owned through `workspace_members`.
+
+## Ownership rules
+
+- Drizzle schema stays in `db/schema.ts`.
+- Database connection setup stays in `db/client.ts`.
+- Feature-specific queries should live in `features/<feature>/data`.
+- Routes and UI should not import raw database queries directly.

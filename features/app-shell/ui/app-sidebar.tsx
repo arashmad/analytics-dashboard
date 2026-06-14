@@ -72,7 +72,8 @@ export function AppSidebar() {
         </nav>
 
         <div className="border-t px-5 py-4 text-xs text-muted-foreground">
-          Workspace and RBAC navigation will be connected in later M3 tickets.
+          Workspace switching is URL-based. RBAC navigation will be connected in
+          later M3 tickets.
         </div>
       </div>
     </aside>

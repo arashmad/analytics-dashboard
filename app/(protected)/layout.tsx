@@ -1,4 +1,5 @@
 import { AppShell } from "@/features/app-shell/ui/app-shell";
+import { getWorkspacesForUser } from "@/features/workspaces/data/workspace-repository";
 import { requireSession } from "@/lib/auth/session";
 
 export default async function ProtectedLayout({
@@ -6,7 +7,8 @@ export default async function ProtectedLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  await requireSession();
+  const session = await requireSession();
+  const workspaces = await getWorkspacesForUser(session.user.id);
 
-  return <AppShell>{children}</AppShell>;
+  return <AppShell workspaces={workspaces}>{children}</AppShell>;
 }

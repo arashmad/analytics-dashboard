@@ -7,7 +7,6 @@ import {
 } from "@/components/ui/card";
 
 import { requireSession } from "@/lib/auth/session";
-import { AuthStatusCard } from "@/features/auth/ui/auth-status-card";
 
 const placeholderMetrics = [
   {

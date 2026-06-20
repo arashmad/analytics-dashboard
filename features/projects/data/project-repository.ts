@@ -1,7 +1,7 @@
 import { and, eq } from "drizzle-orm";
 
 import { db } from "@/db/client";
-import { projects as projectsTable } from "@/db/schema";
+import { projects as projectsTable, type ProjectStatus } from "@/db/schema";
 
 export type Project = {
   id: string;
@@ -9,14 +9,13 @@ export type Project = {
   name: string;
   slug: string;
   description: string | null;
-  status: string;
+  status: ProjectStatus;
 };
 
 export async function findProjectInWorkspace(input: {
   projectId: string;
   workspaceId: string;
 }): Promise<Project | null> {
-  // TODO
   const { projectId, workspaceId } = input;
   const [project] = await db
     .select({

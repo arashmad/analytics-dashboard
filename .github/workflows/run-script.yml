@@ -9,7 +9,7 @@ on:
 
 env:
   DATABASE_URL: postgresql://username:password@localhost:0000/database-name
-  BETTER_AUTH_SECRET: aFakeSecret1234567890=
+  BETTER_AUTH_SECRET: this-is-a-fake-better-auth-secret-for-test1=
 
 jobs:
   execute-script:

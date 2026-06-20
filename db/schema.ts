@@ -205,3 +205,4 @@ export type NewWorkspaceMember = typeof workspaceMembers.$inferInsert;
 
 export type Project = typeof projects.$inferSelect;
 export type NewProject = typeof projects.$inferInsert;
+export type ProjectStatus = (typeof projectStatusEnum)["enumValues"][number];

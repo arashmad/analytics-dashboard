@@ -136,6 +136,48 @@ Before starting each milestone or introducing a major library pattern, check the
 
 Do not add abstraction just to look senior. Add abstraction when it protects boundaries, reduces duplication, or makes testing/authorization clearer.
 
+## Ownership practice and execution mode
+
+InsightPulse is both a portfolio project and an engineering ownership exercise.
+
+The default workflow is challenge-first rather than copy-paste-first:
+
+1. Read the issue and inspect the relevant code.
+2. Restate the problem, facts, assumptions, risks, and non-goals.
+3. Propose the smallest useful design before writing code.
+4. Make reversible assumptions when ambiguity is not a real blocker.
+5. Implement one coherent increment.
+6. Validate expected and failure behavior.
+7. Explain the decisions in the pull request.
+
+Default assistance level:
+
+- Provide the engineering problem, scope boundaries, relevant files, acceptance criteria, decision questions, and review checkpoints.
+- Do not provide complete implementation code before the user has proposed or attempted a solution.
+- Provide targeted hints when progress is blocked.
+- Review the user's implementation and recommend the smallest useful correction.
+- Provide full reference code only when explicitly requested, when work is mainly mechanical, or after a real blocker remains following an attempt.
+
+Before coding, the ticket owner should be able to answer:
+
+- What problem does this ticket solve?
+- What is the important correctness boundary?
+- What belongs in scope and what is intentionally excluded?
+- Which existing layer should own the behavior?
+- What is the smallest implementation that satisfies the issue?
+- Which assumptions are safe and reversible?
+
+Before opening a pull request, the ticket owner should communicate:
+
+- what was found
+- what was decided
+- what changed
+- why the chosen layer is correct
+- how expected and failure behavior were verified
+- what remains intentionally deferred
+
+Do not wait for perfect certainty when a decision is local, reversible, consistent with the current architecture, and sufficient for the ticket. Ask for alignment when a decision changes public behavior, architecture boundaries, database shape, data correctness, milestone scope, or another system contract.
+
 ## Access-control model
 
 Use simple but real workspace-level RBAC.
